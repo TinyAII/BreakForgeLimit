@@ -1,40 +1,33 @@
-# 突破锻造上限 / BreakForgeLimit
+# 突破锻造上限 BreakForgeLimit
 
-![version](https://img.shields.io/badge/version-1.0.0-brightgreen)
-![paper](https://img.shields.io/badge/Paper-1.20.6--1.21.x-blue)
+> 掀掉铁砧"过于昂贵"的天花板，价格递增，经验足够就能一直锻造。MIT 开源，零依赖，Paper 1.20.6~1.21.x。
 
-> ⚒️ 突破铁砧"过于昂贵"限制，只要经验足够，就能一直锻造！/ Break the "Too Expensive" anvil limit!
+原版铁砧当费用超过 **39 级**，就红字"**过于昂贵！**"拒绝锻造——本插件掀掉这个上限，价格继续递增（40、63、127、255…），**只要经验够就能一直锻**。价格永远递增、永不为负，天然筛大佬。
+
+- 🔓 **突破 39 级上限**：费用继续涨，永不被"过于昂贵"卡住
+- 📈 **价格严格递增**：越锻越贵，萌新经验不够自然锻不起
+- 💰 **费用模式可切**（config 一行）：
+  - `vanilla`：完全原版价格（只破上限）
+  - `discount`：折扣曲线（后期打折，比原版平缓，**推荐**）
+- 🧠 **防呆设计**：经验不足提示"需要 X 级"；创造模式不受影响
+- 🎨 **品牌标识**：启动打 TinyAII 像素字横幅
+- 📖 **MIT 开源**：源码已公开（见仓库 `src/`），欢迎学习/二次开发，保留版权署名即可
 
 ---
 
-<details open>
-<summary><b>🇨🇳 中文版（点击收起）</b></summary>
-
-## 功能介绍
-
-**突破锻造上限** 是一款面向 **Paper 生存服** 的铁砧增强插件。原版铁砧费用超过 **39 级**就显示红字"**过于昂贵！**"直接禁止锻造——本插件**掀掉这个天花板**，价格继续递增，**只要经验足够就能一直锻造**！
-
-- 🔓 **突破 39 级上限**：费用 40、63、127、255... 一路涨，永不被"过于昂贵"卡住
-- 📈 **价格严格递增**：越锻越贵，天然筛选大佬——小萌新经验不够自然锻不起
-- 💰 **费用模式可切换**（config 一行搞定）：
-  - `vanilla`：完全原版价格（只突破上限，不调价）
-  - `discount`：折扣曲线（后期打折，比原版平缓，**推荐**）
-- 🧠 **防呆设计**：经验不足时明确提示"需要 X 级经验"；创造模式不受影响
-- 🎨 **品牌标识**：启动时控制台显示 **TinyAII** 像素字
-
-### 🚀 安装
+## 安装
 
 1. 下载 `forge-break-limit-1.0.0.jar`
 2. 放入服务器 `plugins/` 目录
-3. 重启服务器（或执行 `reload`）
-4. 打开铁砧，开始锻造！
+3. 重启服务器（或 `/reload`）
+4. 打开铁砧，开始锻造
 
-### ⚙️ 配置（`plugins/BreakForgeLimit/config.yml`）
+## 配置（`plugins/BreakForgeLimit/config.yml`）
 
 ```yaml
 enabled: true
 cost-mode: discount        # vanilla = 原版价格 | discount = 折扣曲线（推荐）
-discount-rate: 0.45        # 最大折扣（0.45 = 最狠打 55 折；0.3 更温和）
+discount-rate: 0.45        # 最大折扣（0.45 = 狠打 55 折；0.3 更温和）
 discount-ref: 255          # 参考值（达到后折扣封顶，价格继续递增）
 ```
 
@@ -50,75 +43,53 @@ discount-ref: 255          # 参考值（达到后折扣封顶，价格继续递
 
 价格永远递增、永不为负。
 
-### ✅ 兼容性
+## 实现原理（开源可读）
 
-- 服务端：**Paper 1.20.6 – 1.21.x**（需要 AnvilView API）
+- `PrepareAnvilEvent`：`setMaximumRepairCost(MAX_VALUE)` 掀掉上限；真实费用用 `PersistentDataContainer` 藏进结果物品，界面只显示 39 绕开"过于昂贵"红字
+- `InventoryClickEvent`：取真实费用、校验经验、`giveExpLevels` 手动扣级，创造模式不受影响
+- `cost-mode`：`vanilla` 原价只破上限；`discount` 折扣曲线越锻越缓
+
+## 兼容
+
+- 服务端：Paper 1.20.6 – 1.21.x（依赖 `AnvilView` API）
 - Java：17 / 21
-- 无外部依赖
+- 零依赖（无前置插件）
 
-### 👤 作者
+## 开源许可
 
-**TinyAII** — 我的世界服务器管理员
-
-</details>
+**MIT License** — Copyright (c) 2026 TinyAII。源码见 `src/main/java/com/mcadmin/forgebreak/`，可自由使用/修改/分发，请保留版权与许可声明。
 
 ---
 
-<details>
-<summary><b>🇬🇧 English Version (click to expand)</b></summary>
+# BreakForgeLimit (English)
 
-## Introduction
+Remove the anvil "Too Expensive!" cap. Costs keep rising; forge as long as you have XP. MIT open source, zero deps, Paper 1.20.6~1.21.x.
 
-**BreakForgeLimit** is an anvil enhancement plugin for **Paper survival servers**. Vanilla anvils refuse to work when the cost exceeds **39 levels** ("Too Expensive!") — this plugin removes that cap, so you can keep forging as long as you have enough XP!
+## Features
+- Remove the 39-level cap: costs rise (40, 63, 127, 255...) — never blocked
+- Strictly increasing prices: a natural end-game gate
+- Switchable cost mode: `vanilla` (original prices) or `discount` (smoother, **recommended**)
+- Clear "need X levels" message when XP insufficient; creative unaffected
+- TinyAII ASCII banner on startup; **MIT open source**
 
-- 🔓 **Remove the 39-level cap**: costs keep rising (40, 63, 127, 255...) — never blocked by "Too Expensive"
-- 📈 **Strictly increasing prices**: the more you forge, the more it costs — a natural end-game gate
-- 💰 **Switchable cost mode** (one line in config):
-  - `vanilla`: original vanilla prices (only removes the cap)
-  - `discount`: discount curve (cheaper at high tiers, **recommended**)
-- 🧠 **Anti-bug design**: clear "need X levels" message when XP is insufficient; creative mode unaffected
-- 🎨 **Brand banner**: shows a **TinyAII** ASCII banner on startup
+## Install
+jar → `plugins/` → restart
 
-### 🚀 Installation
-
-1. Download `forge-break-limit-1.0.0.jar`
-2. Put it into `plugins/`
-3. Restart server (or run `reload`)
-4. Open an anvil and start forging!
-
-### ⚙️ Config (`plugins/BreakForgeLimit/config.yml`)
-
+## Config (`plugins/BreakForgeLimit/config.yml`)
 ```yaml
 enabled: true
-cost-mode: discount        # vanilla = original prices | discount = discount curve (recommended)
-discount-rate: 0.45        # max discount (0.45 = up to 55% off; 0.3 = gentler)
-discount-ref: 255          # reference value (discount caps here, prices keep rising)
+cost-mode: discount      # vanilla | discount
+discount-rate: 0.45
+discount-ref: 255
 ```
 
-**Discount curve example**:
+## Compatibility
+- Paper 1.20.6 – 1.21.x (uses `AnvilView` API)
+- Java 17 / 21
+- Zero dependencies
 
-| Forge # | Vanilla | New |
-|---|---|---|
-| 5 | 31 | 29 |
-| 6 | 63 | 56 |
-| 7 | 127 | 99 |
-| 8 | 255 | 140 |
-| 9 | 511 | 281 |
+## License
+**MIT** — Copyright (c) 2026 TinyAII. Source in `src/`. Free to use, modify, distribute; keep the copyright notice.
 
-Prices always rise, never negative.
-
-### ✅ Compatibility
-
-- Server: **Paper 1.20.6 – 1.21.x** (requires AnvilView API)
-- Java: 17 / 21
-- No external dependencies
-
-### 👤 Author
-
-**TinyAII** — Minecraft Server Administrator
-
-</details>
-
----
-
-by TinyAII ❤️
+## Author
+TinyAII · MIT 开源 · 零依赖
